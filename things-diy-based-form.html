@@ -84,10 +84,6 @@
 				}
 			},
 
-			observers: [
-				'_gridColumnsChanged(gridColumns)'
-			],
-
 			/**
 			 * DiyForm 명이 변경되면 DiyForm 조회 URL을 리턴 
 			 *
@@ -102,13 +98,6 @@
 			 */
 			getForm: function() {
 				return this.$.form;
-			},
-
-			/**
-			 * Grid Columns 변경시
-			 */
-			_gridColumnsChanged: function(gridColumns) {
-				this.fire('things-view-columns-grid-meta-changed', gridColumns);
 			}
 		});
 	</script>
