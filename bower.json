@@ -1,16 +1,16 @@
 {
-  "name": "things-scetion",
-  "version": "0.1.1",
+  "name": "things-section",
+  "version": "0.1.2",
   "authors": [
     "Hatio Lab. <heartyoh@hatiolab.com>"
   ],
-  "description": "An element providing Date Picker, Time Picker and Date Range Pickger (things-date-from-to).",
+  "description": "An element providing things-section",
   "keywords": [
     "web-component",
     "polymer",
     "seed"
   ],
-  "main": "things-scetion.html",
+  "main": "things-section.html",
   "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/ThingsElements/seed-element/",
   "ignore": [
