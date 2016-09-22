@@ -35,14 +35,14 @@
         @apply(--layout-horizontal);
         @apply(--layout-end-justified);
         padding: 0 10px;
-      }      
+      }
     </style>
 
     <things-ws-subscriber id="subscriber"
                           !auto
-                          url-key="wsUrl" 
+                          url-key="wsUrl"
                           subject="[[subject]]">
-    </things-ws-subscriber> 
+    </things-ws-subscriber>
 
     <things-ajax  auto
                   id="get-scene"
@@ -51,6 +51,7 @@
     </things-ajax>
 
     <things-scene-viewer model="[[model]]"
+                         scene="{{navigatorScene}}"
                          values="[[monitoringData]]"
                          mode="1"
                          fit="both"
@@ -141,14 +142,14 @@
         },
 
         /**
-         * Subscribe 할 채널 명 
+         * Subscribe 할 채널 명
          */
         subject: {
           type: String
         },
 
         /**
-         * 모니터링 데이터 
+         * 모니터링 데이터
          */
         monitoringData: {
           type: Object
@@ -160,15 +161,53 @@
         control: {
           type: Boolean,
           value: false
+        },
+
+        /**
+         * target three-container for picking navigation
+         */
+        targetContainer: {
+          type : Object
+        }
+
+        /**
+         *
+         */
+        _pickingLocations : {
+          type : Array,
+          value : []
+        }
+
+        listeners: {
+          'picking-locations-grid.things-grid-row-data-select': '_onLocationSelected'
         }
       },
 
       _resourceIdChanged: function(id) {
         this.resourceUrl = this.resourceUrl + id;
+
+
+        /*
+        if(this.route !== this.getAttribute('data-route'))
+          return;
+
+        if(!this.scene && !this.label)
+          return;
+
+        if(before == 'info' || !this.scene)
+          this.model = JSON.parse(this.label.model);
+        else
+          this.model = this.scene.model;
+
+        this.navigatorScene.translate = {
+          x: 0,
+          y: 0
+        };
+        */
       },
 
       /**
-       * Scene 정보 조회 후 모델 설정 
+       * Scene 정보 조회 후 모델 설정
        */
       responseChanged: function(data) {
         if(data) {
@@ -224,7 +263,72 @@
        */
       messageReceived: function(message) {
         this.monitoringData = message;
+      },
+
+      /**
+       * Set picking locations to three-container
+       * locations data example : [{
+           'location' : '1-2-7-A-3',
+           'loc' : 'LOC-1-2-7-A-3',
+           'material' : 'HP DVD-ROM WD',
+           'qty' : 2,
+           'navigationData' : {
+             'order': 1
+           }
+         }, {
+           'location' : '2-5-6-A-1',
+           'loc' : 'LOC-2-5-6-A-1',
+           'material' : 'HP DVD-ROM WD',
+           'qty' : 8,
+           'navigationData' : {
+             'order': 2
+           }
+         }, {
+           'location' : '2-5-6-B-3',
+           'loc' : 'LOC-2-5-6-B-3',
+           'material' : 'SSD 500MB WD',
+           'qty' : 6,
+           'navigationData' : {
+             'order': 3
+           }
+         }]
+       */
+      setPickingLocations: function(locations) {
+        let pickingLocations = locations || []
+
+        if(this._pickingLocations) {
+          for(let i in this._pickingLocations) {
+            let loc = this._pickingLocations[i]
+            delete loc.navigationData
+          }
+        }
+
+        this._pickingLocations = pickingLocations
+        let threeContainer = this.targetContainer || this.navigatorScene.findFirst("three-container")
+
+        threeContainer.set('data', this._pickingLocations)
+
+      },
+
+      /**
+       * Select location
+       */
+      selectLocation: function(location) {
+        let threeContainer = this.targetContainer || this.navigatorScene.findFirst("three-container")
+
+        for(let i in this._pickingLocations) {
+          let obj = this._pickingLocations[i]
+          if(obj.location == location) {
+            obj.selected = true
+          } else {
+            delete obj.selected
+          }
+        }
+
+        threeContainer.set('data', this._pickingLocations)
+        threeContainer.moveCameraTo(location)
       }
+
     });
   </script>
 </dom-module>
