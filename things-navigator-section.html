@@ -1,0 +1,230 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../things-i18n-msg/things-i18n-msg.html">
+<link rel="import" href="../things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../things-ws/things-ws-subscriber.html">
+
+<link rel="import" href="../things-scene-viewer/things-scene-viewer.html">
+<link rel="import" href="../things-scene-chartjs/things-scene-chartjs.html">
+<link rel="import" href="../things-scene-controlchart/things-scene-controlchart.html">
+<link rel="import" href="../things-scene-three-container/things-scene-three-container.html">
+
+<!--
+  things-navigator-section
+-->
+
+<dom-module id="things-navigator-section">
+  <template>
+    <style>
+      :host {
+        display: block;
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+      }
+
+      things-scene-viewer {
+        @apply(--layout-flex)
+      }
+      paper-toolbar {
+        background-color:var(--things-white-background-color);
+        height: 50px;
+        @apply(--things-tight-padding);
+      }
+      paper-toolbar::shadow #bottomBar {
+        height: 50px;
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        padding: 0 10px;
+      }      
+    </style>
+
+    <things-ws-subscriber id="subscriber"
+                          !auto
+                          url-key="wsUrl" 
+                          subject="[[subject]]">
+    </things-ws-subscriber> 
+
+    <things-ajax  auto
+                  id="get-scene"
+                  resource-url="[[resourceUrl]]"
+                  last-response="{{response}}">
+    </things-ajax>
+
+    <things-scene-viewer model="[[model]]"
+                         values="[[monitoringData]]"
+                         mode="1"
+                         fit="both"
+                         base-url="[[globals.baseUrl]]">
+    </things-scene-viewer>
+
+    <paper-toolbar>
+      <div class="bottom" hidden="[[hideBtn]]">
+        <things-button-bar id="button-group" buttons="[[startBtn]]" on-tap="controlBtnTap" hidden="[[control]]"></things-button-bar>
+        <things-button-bar id="button-group" buttons="[[stopBtn]]" on-tap="controlBtnTap" hidden="[[!control]]"></things-button-bar>
+      </div>
+    </paper-toolbar>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'things-navigator-section',
+
+      behaviors: [
+        Things.GlobalBehavior
+      ],
+
+      properties: {
+
+        /**
+         * resourc url
+         */
+        resourceUrl: {
+          type: String,
+          value: 'scenes/'
+        },
+
+        /**
+         * resource id
+         */
+        resourceId: {
+          type: String,
+          observer: '_resourceIdChanged'
+        },
+
+        /**
+         * button hide 여부
+         */
+        hideBtn: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * monitoring start button
+         */
+        startBtn: {
+          type: Array,
+          value: function() {
+            return [{
+              id: 'start-btn',
+              text: 'start'
+            }]
+          }
+        },
+
+        /**
+         * monitoring stop button
+         */
+        stopBtn: {
+          type: Array,
+          value: function() {
+            return [{
+              id: 'stop-btn',
+              text: 'stop'
+            }]
+          }
+        },
+
+        /**
+         * Scene Model
+         */
+        model: {
+          type: Object
+        },
+
+        /**
+         * Scene 정보 조회 후 ...
+         */
+        response: {
+          type: Object,
+          observer: 'responseChanged'
+        },
+
+        /**
+         * Subscribe 할 채널 명 
+         */
+        subject: {
+          type: String
+        },
+
+        /**
+         * 모니터링 데이터 
+         */
+        monitoringData: {
+          type: Object
+        },
+
+        /**
+         * monitoring start/stop 여부
+         */
+        control: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      _resourceIdChanged: function(id) {
+        this.resourceUrl = this.resourceUrl + id;
+      },
+
+      /**
+       * Scene 정보 조회 후 모델 설정 
+       */
+      responseChanged: function(data) {
+        if(data) {
+          this.model = JSON.parse(data.model);
+          this.variables = this.model.variables;
+          if(this.subject) this.subject = this.subject + data.name;
+        }
+      },
+
+      /**
+       * control button 텝 했을 때
+       */
+      controlBtnTap: function() {
+        this.control = !this.control;
+
+        if(this.control == true) {
+          this.startMonitor();
+        } else {
+          this.stopMonitor();
+        }
+      },
+
+      /**
+       * Start monitoring
+       */
+      startMonitor: function() {
+        var connected = this.$.subscriber.status();
+        if(!connected) {
+          this.$.subscriber.callback = this.messageReceived.bind(this);
+          this.$.subscriber.start();
+        }
+      },
+
+      /**
+       * model variable getter
+       */
+      getModelVariables: function() {
+        return this.variables;
+      },
+
+      /**
+       * Stop monitoring
+       */
+      stopMonitor: function() {
+        var connected = this.$.subscriber.status();
+        if(connected) {
+          this.$.subscriber.stop();
+        }
+      },
+
+      /**
+       * 모니터링 데이터를 받음 ...
+       */
+      messageReceived: function(message) {
+        this.monitoringData = message;
+      }
+    });
+  </script>
+</dom-module>
