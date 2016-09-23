@@ -5,6 +5,7 @@
 <link rel="import" href="../things-ws/things-ws-subscriber.html">
 
 <link rel="import" href="../things-scene-viewer/things-scene-viewer.html">
+<link rel="import" href="../things-scene-indoor-map/things-scene-indoor-map.html">
 <link rel="import" href="../things-scene-chartjs/things-scene-chartjs.html">
 <link rel="import" href="../things-scene-controlchart/things-scene-controlchart.html">
 <link rel="import" href="../things-scene-three-container/things-scene-three-container.html">
@@ -76,6 +77,9 @@
 
       properties: {
 
+        navigatorScene: {
+          type: Object
+        },
         /**
          * resourc url
          */
@@ -185,25 +189,6 @@
 
       _resourceIdChanged: function(id) {
         this.resourceUrl = this.resourceUrl + id;
-
-
-        /*
-        if(this.route !== this.getAttribute('data-route'))
-          return;
-
-        if(!this.scene && !this.label)
-          return;
-
-        if(before == 'info' || !this.scene)
-          this.model = JSON.parse(this.label.model);
-        else
-          this.model = this.scene.model;
-
-        this.navigatorScene.translate = {
-          x: 0,
-          y: 0
-        };
-        */
       },
 
       /**
@@ -214,6 +199,12 @@
           this.model = JSON.parse(data.model);
           this.variables = this.model.variables;
           if(this.subject) this.subject = this.subject + data.name;
+
+          if(this.navigatorScene)
+            this.navigatorScene.translate = {
+              x: 0,
+              y: 0
+            };
         }
       },
 
