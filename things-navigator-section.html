@@ -53,7 +53,7 @@
     <things-scene-viewer model="[[model]]"
                          scene="{{navigatorScene}}"
                          values="[[monitoringData]]"
-                         mode="1"
+                         mode="0"
                          fit="both"
                          base-url="[[globals.baseUrl]]">
     </things-scene-viewer>
@@ -168,7 +168,7 @@
          */
         targetContainer: {
           type : Object
-        }
+        },
 
         /**
          *
@@ -176,7 +176,7 @@
         _pickingLocations : {
           type : Array,
           value : []
-        }
+        },
 
         listeners: {
           'picking-locations-grid.things-grid-row-data-select': '_onLocationSelected'
