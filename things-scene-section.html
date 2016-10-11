@@ -57,8 +57,8 @@
                          base-url="[[globals.baseUrl]]">
     </things-scene-viewer>
 
-    <paper-toolbar>
-      <div class="bottom" hidden="[[hideBtn]]">
+    <paper-toolbar hidden="[[hideBtn]]">
+      <div class="bottom">
         <things-button-bar id="button-group" buttons="[[startBtn]]" on-tap="controlBtnTap" hidden="[[control]]"></things-button-bar>
         <things-button-bar id="button-group" buttons="[[stopBtn]]" on-tap="controlBtnTap" hidden="[[!control]]"></things-button-bar>
       </div>
