@@ -171,17 +171,11 @@
           this.model = JSON.parse(data.model);
           this.publishSubject = '/elidom/stomp/topic/hatiolab-hq/smart/' + data.name;
         }
-      },                  
-
-      pollingConditionChanged: function(pollingInterval, pollingUrl) {
-        if(pollingInterval && pollingInterval > 0 && pollingUrl && pollingUrl) {
-          this.pollingInterval = pollingInterval
-          this.pollingRul
-        } else {
-          return;
-        }
       },
 
+      /**
+       * pulling request callback
+       */
       pullRequest: function() {
         this.$['polling-ajax'].generateRequest();
       },
