@@ -41,13 +41,25 @@
     <things-ws-subscriber id="subscriber"
                           !auto
                           url-key="wsUrl" 
-                          subject="[[subject]]">
-    </things-ws-subscriber> 
+                          subject="[[publishSubject]]">
+    </things-ws-subscriber>
+
+    <things-ajax  auto
+                  id="get-menu-params"
+                  resource-url="menus/:id/menu_params"
+                  resource-id="[[menuId]]"
+                  last-response="{{menuParams}}">
+    </things-ajax>    
 
     <things-ajax  auto
                   id="get-scene"
-                  resource-url="[[resourceUrl]]"
-                  last-response="{{response}}">
+                  resource-url="[[menuInfo.resource_url]]"
+                  last-response="[[response]]">
+    </things-ajax>    
+
+    <things-ajax  id="polling-ajax"
+                  resource-url="[[pollingUrl]]"
+                  last-response="{{pollingResponse}}">
     </things-ajax>
 
     <things-scene-viewer model="[[model]]"
@@ -56,13 +68,6 @@
                          fit="both"
                          base-url="[[globals.baseUrl]]">
     </things-scene-viewer>
-
-    <paper-toolbar hidden="[[hideBtn]]">
-      <div class="bottom">
-        <things-button-bar id="button-group" buttons="[[startBtn]]" on-tap="controlBtnTap" hidden="[[control]]"></things-button-bar>
-        <things-button-bar id="button-group" buttons="[[stopBtn]]" on-tap="controlBtnTap" hidden="[[!control]]"></things-button-bar>
-      </div>
-    </paper-toolbar>
   </template>
 
   <script>
@@ -70,61 +75,11 @@
       is: 'things-scene-section',
 
       behaviors: [
-        Things.GlobalBehavior
+        Things.MenuContentBehavior,
+        Things.MonitoringBehavior
       ],
 
       properties: {
-
-        /**
-         * resourc url
-         */
-        resourceUrl: {
-          type: String,
-          value: 'scenes/'
-        },
-
-        /**
-         * resource id
-         */
-        resourceId: {
-          type: String,
-          observer: '_resourceIdChanged'
-        },
-
-        /**
-         * button hide 여부
-         */
-        hideBtn: {
-          type: Boolean,
-          value: false
-        },
-
-        /**
-         * monitoring start button
-         */
-        startBtn: {
-          type: Array,
-          value: function() {
-            return [{
-              id: 'start-btn',
-              text: 'start'
-            }]
-          }
-        },
-
-        /**
-         * monitoring stop button
-         */
-        stopBtn: {
-          type: Array,
-          value: function() {
-            return [{
-              id: 'stop-btn',
-              text: 'stop'
-            }]
-          }
-        },
-
         /**
          * Scene Model
          */
@@ -141,9 +96,39 @@
         },
 
         /**
-         * Subscribe 할 채널 명 
+         * polling interval (second)
          */
-        subject: {
+        pollingInterval: {
+          type: String,
+          value: 10
+        },
+
+        /**
+         * polling target url
+         */
+        pollingUrl: {
+          type: String
+        },
+
+        /**
+         * polling에 의한 response
+         */
+        pollingResponse: {
+          type: Array,
+          observer: 'pollingResponseChanged'
+        },
+
+        /**
+         * async Polling
+         */
+        _asyncPolling: {
+          type: Object
+        },
+
+        /**
+         * publish subject
+         */
+        publishSubject: {
           type: String
         },
 
@@ -152,19 +137,30 @@
          */
         monitoringData: {
           type: Object
-        },
-
-        /**
-         * monitoring start/stop 여부
-         */
-        control: {
-          type: Boolean,
-          value: false
         }
       },
 
-      _resourceIdChanged: function(id) {
-        this.resourceUrl = this.resourceUrl + id;
+      observers: [
+        'pollingConditionChanged(pollingInterval, pollingUrl)'
+      ],      
+
+      ready: function() {
+        document.addEventListener('things-toggle-play-pages', function(event) {
+          var power = event.detail;
+          this.playPagesToggled(power);
+        }.bind(this));
+
+        this.pullRequestCallback = this.pullRequest;
+        this.subscriberId = 'subscriber';
+        this.msgReceivedCallback = this.messageReceived;
+      },
+
+      /**
+       * fullscreen 변경시 event listener
+       */
+      playPagesToggled: function(power) {
+        if(power == 'on') this.startCollectData();
+        if(power == 'off') this.stopCollectData();
       },
 
       /**
@@ -173,50 +169,28 @@
       responseChanged: function(data) {
         if(data) {
           this.model = JSON.parse(data.model);
-          this.variables = this.model.variables;
-          if(this.subject) this.subject = this.subject + data.name;
+          this.publishSubject = '/elidom/stomp/topic/hatiolab-hq/smart/' + data.name;
         }
-      },
+      },                  
 
-      /**
-       * control button 텝 했을 때
-       */
-      controlBtnTap: function() {
-        this.control = !this.control;
-
-        if(this.control == true) {
-          this.startMonitor();
+      pollingConditionChanged: function(pollingInterval, pollingUrl) {
+        if(pollingInterval && pollingInterval > 0 && pollingUrl && pollingUrl) {
+          this.pollingInterval = pollingInterval
+          this.pollingRul
         } else {
-          this.stopMonitor();
+          return;
         }
+      }
+
+      pullRequest: function() {
+        this.$['polling-ajax'].generateRequest();
       },
 
       /**
-       * Start monitoring
+       * polling data responsed
        */
-      startMonitor: function() {
-        var connected = this.$.subscriber.status();
-        if(!connected) {
-          this.$.subscriber.callback = this.messageReceived.bind(this);
-          this.$.subscriber.start();
-        }
-      },
-
-      /**
-       * model variable getter
-       */
-      getModelVariables: function() {
-        return this.variables;
-      },
-
-      /**
-       * Stop monitoring
-       */
-      stopMonitor: function() {
-        var connected = this.$.subscriber.status();
-        if(connected) {
-          this.$.subscriber.stop();
-        }
+      pollingResponseChanged: function(data) {
+        this.messageReceived(data);
       },
 
       /**
