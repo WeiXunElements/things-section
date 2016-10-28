@@ -45,16 +45,9 @@
     </things-ws-subscriber>
 
     <things-ajax  auto
-                  id="get-menu-params"
-                  resource-url="menus/:id/menu_params"
-                  resource-id="[[menuId]]"
-                  last-response="{{menuParams}}">
-    </things-ajax>    
-
-    <things-ajax  auto
                   id="get-scene"
-                  resource-url="[[menuInfo.resource_url]]"
-                  last-response="[[response]]">
+                  resource-url="[[resourceUrl]]"
+                  last-response="{{response}}">
     </things-ajax>    
 
     <things-ajax  id="polling-ajax"
@@ -75,16 +68,25 @@
       is: 'things-scene-section',
 
       behaviors: [
-        Things.MenuContentBehavior,
+        Things.GlobalBehavior,
         Things.MonitoringBehavior
       ],
 
       properties: {
+        
+        /**
+         * scene 호출 URL
+         */
+        resourceUrl: {
+          type: String
+        },
+
         /**
          * Scene Model
          */
         model: {
-          type: Object
+          type: Object,
+          notify: true
         },
 
         /**
@@ -140,16 +142,10 @@
         }
       },
 
-      observers: [
-        'pollingConditionChanged(pollingInterval, pollingUrl)'
-      ],      
-
+      /**
+       * callback 함수와 subscriber id를 초기화
+       */
       ready: function() {
-        document.addEventListener('things-toggle-play-pages', function(event) {
-          var power = event.detail;
-          this.playPagesToggled(power);
-        }.bind(this));
-
         this.pullRequestCallback = this.pullRequest;
         this.subscriberId = 'subscriber';
         this.msgReceivedCallback = this.messageReceived;
@@ -169,7 +165,7 @@
       responseChanged: function(data) {
         if(data) {
           this.model = JSON.parse(data.model);
-          this.publishSubject = '/elidom/stomp/topic/hatiolab-hq/smart/' + data.name;
+          // this.publishSubject = '/elidom/stomp/topic/hatiolab-hq/smart/' + data.name;
         }
       },
 
