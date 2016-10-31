@@ -53,7 +53,7 @@
     </things-ajax>    
 
     <things-ajax  id="polling-ajax"
-                  resource-url="[[pollingUrl]]"
+                  resource-url="[[pullUrl]]"
                   last-response="{{pollingResponse}}">
     </things-ajax>
 
@@ -111,7 +111,7 @@
         /**
          * polling target url
          */
-        pollingUrl: {
+        pullUrl: {
           type: String
         },
 
@@ -168,7 +168,6 @@
       responseChanged: function(data) {
         if(data) {
           this.model = JSON.parse(data.model);
-          // this.publishSubject = '/elidom/stomp/topic/hatiolab-hq/smart/' + data.name;
         }
       },
 
