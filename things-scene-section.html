@@ -39,23 +39,11 @@
       }      
     </style>
 
-    <things-ws-subscriber id="subscriber"
-                          !auto
-                          url-key="wsUrl" 
-                          subject="[[publishSubject]]">
-    </things-ws-subscriber>
-
-    <things-ajax 
-                  id="get-scene"
+    <things-ajax  id="get-scene"
                   resource-url="scenes/:id"
                   resource-id="[[resourceId]]"
                   last-response="{{response}}">
     </things-ajax>    
-
-    <things-ajax  id="polling-ajax"
-                  resource-url="[[pullUrl]]"
-                  last-response="{{pollingResponse}}">
-    </things-ajax>
 
     <things-scene-viewer model="[[model]]"
                          values="[[monitoringData]]"
@@ -70,18 +58,25 @@
       is: 'things-scene-section',
 
       behaviors: [
-        Things.GlobalBehavior,
-        Things.MonitoringBehavior
+        Things.GlobalBehavior
       ],
 
       properties: {
         
         /**
-         * scene 호출 URL
+         * scene id가 변경되면 scene을 가져온다.
          */
         resourceId: {
           type: Number,
           observer: 'resourceIdChanged'
+        },
+
+        /**
+         * 가져온 scene의 모델을 파싱하여 scene viewer에 넘겨준다.
+         */
+        response: {
+          type: Object,
+          observer: 'responseChanged'
         },
 
         /**
@@ -95,46 +90,19 @@
         /**
          * Scene 정보 조회 후 ...
          */
-        response: {
+        sceneData: {
           type: Object,
-          observer: 'responseChanged'
+          observer: 'messageChanged'
         },
 
         /**
-         * polling interval (second)
+         * 외부로 부터 전달 받는 scene 데이터
+         * pull-repeat or subscribe를 통해 데이터를 전달 받아
+         * scene 모델에 초기화 
          */
-        pollingInterval: {
-          type: String,
-          value: 10
-        },
-
-        /**
-         * polling target url
-         */
-        pullUrl: {
-          type: String
-        },
-
-        /**
-         * polling에 의한 response
-         */
-        pollingResponse: {
+        message: {
           type: Array,
-          observer: 'pollingResponseChanged'
-        },
-
-        /**
-         * async Polling
-         */
-        _asyncPolling: {
-          type: Object
-        },
-
-        /**
-         * publish subject
-         */
-        publishSubject: {
-          type: String
+          observer: 'messageChanged'
         },
 
         /**
@@ -143,23 +111,6 @@
         monitoringData: {
           type: Object
         }
-      },
-
-      /**
-       * callback 함수와 subscriber id를 초기화
-       */
-      ready: function() {
-        this.pullRequestCallback = this.pullRequest;
-        this.subscriberId = 'subscriber';
-        this.msgReceivedCallback = this.messageReceived;
-      },
-
-      /**
-       * fullscreen 변경시 event listener
-       */
-      playPagesToggled: function(power) {
-        if(power == 'on') this.startCollectData();
-        if(power == 'off') this.stopCollectData();
       },
 
       /**
@@ -172,23 +123,16 @@
       },
 
       /**
-       * pulling request callback
+       * 모니터링 데이터를 전달 받는다
        */
-      pullRequest: function() {
-        this.$['polling-ajax'].generateRequest();
-      },
-
-      /**
-       * polling data responsed
-       */
-      pollingResponseChanged: function(data) {
-        this.messageReceived(data);
+      messageChanged: function(data) {
+        this.monitoringData = data;
       },
 
       /**
        * 모니터링 데이터를 받음 ...
        */
-      messageReceived: function(message) {
+      dataReceived: function(message) {
         this.monitoringData = message;
       },
 
@@ -196,14 +140,7 @@
        * resource id가 변경되면 scene을 가져 온다.
        */
       resourceIdChanged: function() {
-        this.getSceneAjax().generateRequest();
-      },
-
-      /**
-       * get scene ajax
-       */
-      getSceneAjax: function() {
-        return this.$['get-scene'];
+        this.$['get-scene'].generateRequest();
       }
     });
   </script>
