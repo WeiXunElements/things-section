@@ -90,7 +90,9 @@
 			},
 
 			observers: [
-				'_gridColumnsChanged(gridColumns)'
+				'_gridColumnsChanged(gridColumns)',
+				'_gridModelChanged(gridModel)',
+				'_gridButtonsChanged(buttons)'
 			],
 
 			/**
@@ -113,8 +115,22 @@
 			 * Grid Columns 변경시
 			 */
 			_gridColumnsChanged: function(gridColumns) {
-				this.fire('things-view-columns-grid-meta-changed', gridColumns);
-			}			
+				this.fire('things-menu-grid-columns-changed', gridColumns);
+			},
+
+			/**
+			 * Grid Model 변경시
+			 */
+			_gridModelChanged: function(gridModel) {
+				this.fire('things-menu-grid-models-changed', gridModel);
+			},
+
+			/**
+			 * Grid Buttons 변경시
+			 */
+			_gridButtonsChanged: function(buttons) {
+				this.fire('things-menu-grid-buttons-changed', buttons);
+			}
 		});
 	</script>
 </dom-module>

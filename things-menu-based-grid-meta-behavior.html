@@ -57,10 +57,12 @@ Things.MenuBasedGridMetaBehaviorImpl = {
 	parseMetaData: function(metaData) {
 		if(!metaData || metaData.length == 0) return;
 
-		// 1. Parse Grid Models - grid form
+		// 1. Parse Grid Models 
 		this.gridModel = this._parseGridModel(metaData.columns);
-		// 2. Parse Grid Columns - grid form
+		// 2. Parse Grid Columns 
 		this.gridColumns = this._parseGridColumns(metaData.columns);
+		// 3. Parse Grid Buttons 
+		this.buttons = this._parseButtons(metaData.buttons);
 	}	
 
 };
