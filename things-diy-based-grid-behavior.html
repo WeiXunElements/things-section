@@ -67,6 +67,20 @@ Things.DiyBasedGridBehaviorImpl = {
 	},
 
 	/**
+	 * 그리드 데이터를 초기화 
+	 */
+	resetData: function() {
+		this.items = [];
+	},
+
+	/**
+	 * 그리드 데이터를 리프레쉬  
+	 */
+	refreshData: function(items) {
+		this.items = items;
+	},
+
+	/**
 	 * ID Field를 리턴한다.
 	 */
 	getIdField: function() {

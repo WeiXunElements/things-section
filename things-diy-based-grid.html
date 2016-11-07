@@ -24,13 +24,13 @@
 			}
 		</style>
 
-    <things-ajax 
-      auto
-      id="diy-grid-ajax"
-      method="GET"
-      resource-url="[[getDiyGridUrl]]"
-      last-response="{{diyGrid}}">
-    </things-ajax> 
+		<things-ajax 
+			auto
+			id="diy-grid-ajax"
+			method="GET"
+			resource-url="[[getDiyGridUrl]]"
+			last-response="{{diyGrid}}">
+		</things-ajax> 
 
 		<things-ajax 
 			auto
@@ -119,6 +119,13 @@
 			],
 
 			/**
+			* 그리드 정보 초기화
+			*/
+			ready: function() {
+				this.set('grid', this.$.grid) 
+			},
+
+			/**
 			 * DiyGrid 명이 변경되면 DiyGrid 조회 URL을 리턴 
 			 *
 			 * @param {String} menuName
@@ -126,12 +133,7 @@
 			_computeGetDiyGridUrl: function(diyGridName) {
 				return 'diy_grids/show_by_name?name=' + diyGridName;
 			},
-			/**
-			* 그리드 정보 초기화
-			*/
-			ready: function(){
-				this.set('grid',this.$.grid) 
-			},
+			
 			/**
 			 * things-resource-grid를 리턴한다.
 			 */
