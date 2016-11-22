@@ -54,7 +54,9 @@
 			data="[[items]]"
 			total-count="[[itemCount]]"
 			grid-save-action="[[gridSaveUrl]]"
-			fixed-column-count="[[fixedColumnCount]]">
+			fixed-column-count="[[fixedColumnCount]]"
+			selected-row-data="{{selectedRowData}}"
+			selected-cell-data="{{selectedCellData}}">
 		</things-resource-grid>
 	</template>
 
@@ -103,6 +105,22 @@
 				fixedColumnCount: {
 					type: Number,
 					value: 3
+				},
+				
+				/**
+				* 선택된 row data
+				*/
+				selectedRowData: {
+					type: Object,
+					notify: true
+				},
+
+				/**
+				* 선택된 cell data
+				*/
+				selectedCellData: {
+					type: Object,
+					notify: true
 				},
 
 				/**
