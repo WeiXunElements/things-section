@@ -26,6 +26,14 @@ Things.DiyBasedFormBehaviorImpl = {
 		},
 
 		/**
+		 * 폼 컬럼 개 
+		 */
+		columnCount: {
+			type: Number,
+			value: 1
+		},
+
+		/**
 		 * 폼 데이터 
 		 */
 		resource: {
@@ -40,6 +48,58 @@ Things.DiyBasedFormBehaviorImpl = {
 		return this.$.form;
 	},
 
+	/**
+	 * Form 데이터를 serialize하여 리턴 
+	 */
+	serializeMyForm: function() {
+		return this.getForm().serializeMyForm();
+	},
+
+	/**
+	 * Form 데이터를 reset 
+	 */
+	resetMyForm: function() {
+		this.getForm().resetMyForm();
+	},
+
+	/**
+	 * Form 데이터 설정 
+	 */
+	setFormData: function(data) {
+		this.getForm().setFormData(data);
+	},
+
+	/**
+	 * Focus를 설정한다.
+	 */
+	focus: function() {
+		this.getForm().focus();
+	},
+
+	/**
+	 * 모든 Form Element를 리턴 
+	 */
+	getFormElements: function() {
+		return this.getForm().getFormElements();
+	},
+
+	/**
+	 * Validation check before save. 
+	 * 필드들의 isValid 속성을 통해 valdation 체크를 수행
+	 */
+	validationCheck: function() {
+		return this.getForm().validationCheck();
+	},
+
+	/**
+	 * Submit form
+	 *
+	 * @param {Object} e 버튼 클릭 이벤트 
+	 */
+	submitMyForm: function(e) {
+		this.getForm().submitMyForm();
+	}
+			
 	/**
 	 * 그리드 데이터를 초기화 
 	 */
@@ -76,6 +136,7 @@ Things.DiyBasedFormBehaviorImpl = {
 	_diyFormChanged: function(diyForm) {
 		if(diyForm) {
 			this.diyFormId = diyForm.id;
+			this.columnCount = diyForm.columns_per_row;
 		}
 	}
 };
