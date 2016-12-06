@@ -2,6 +2,8 @@
 
 <link rel="import" href="../things-ajax/things-ajax.html">
 <link rel="import" href="../things-grid/things-resource-grid.html">
+<link rel="import" href="../things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html">
 
 <!--
 메뉴 기반 Import 그리드
@@ -30,6 +32,7 @@
 		<things-ajax 
 			id="check-import-ajax"
 			method="POST"
+			resource-action="update_multiple"
 			content-type="application/json"
 			resource-url="[[checkImportUrl]]">
 		</things-ajax>
@@ -50,6 +53,11 @@
 	<script>
 		Polymer({
 			is: 'things-import-grid',
+
+      behaviors: [
+        Things.MsgBoxBehavior,
+        Things.GlobalBehavior
+      ],
 
 			properties: {
 				/**
@@ -83,7 +91,15 @@
 				},
 
 				/**
-				 * Items
+				 * 저장 전에 서베에 체크를 했는지 여부 
+				 */
+				checkedForSave: {
+					type: Boolean,
+					value: false
+				},
+
+				/**
+				 * 그리드에 바인딩된 데이터 
 				 */
 				items: {
 					type: Array,
@@ -93,7 +109,17 @@
 				},
 
 				/**
-				 * 임시 Items
+				 * 저장시에 사용할 데이터 
+				 */
+				saveItems: {
+					type: Array,
+					value: function() {
+						return [];
+					}
+				},
+
+				/**
+				 * 임시 데이터 
 				 */
 				tempItems: {
 					type: Array,
@@ -141,24 +167,30 @@
 						id: 'save-btn',
 						text: 'save'
 					}, {
-						id: 'export-btn',
-						text: 'export'
-					}, {
 						id: 'import-btn',
 						text: 'import'
 					} ]
+				},
+
+				/**
+				 * Close시 실행할 Callback
+				 */
+				closeCallback: {
+					type: Function
 				}
 			},
 
 			listeners : {
-				'check-btn-tap' : '_checkForImport',
+				'grid.things-grid-configured' : '_gridConfigured',
 				'grid.things-grid-import-finished' : '_importFinished',
 				'grid.things-grid-handle-build-writedata' : '_handleSetupGridWriteData',
+				'grid.things-grid-handle-deleterow' : '_handleDeleteRow',
 				'grid.things-grid-handle-save' : '_handleSave',
 				'create-ajax.things-ajax-response' : '_handleSaveSuccess',
 				'create-ajax.things-ajax-error' : '_handleSaveFailure',
 				'check-import-ajax.things-ajax-response' : '_handleCheckImportSuccess',
-				'check-import-ajax.things-ajax-error' : '_handleCheckImportFailure'
+				'check-import-ajax.things-ajax-error' : '_handleCheckImportFailure',
+				'check-btn-tap' : '_checkForImport'
 			},
 
 			/**
@@ -177,16 +209,54 @@
 			},
 
 			/**
+			 * 그리드 완성 후 ...
+			 */
+			_gridConfigured: function(event) {
+				this.getGrid().getGridObject().onEditCommitted = function(grid, index, newValue, oldValue) {
+					this.checkedForSave = false;
+				}
+			},
+
+			/**
 			 * Import 전에 데이터 체크 
 			 *
 			 * @param {Object} event
 			 */
 			_checkForImport: function(event) {
 				if(!this.items || this.items.length == 0) return;
-
 				var checkImportAjax = this.$['check-import-ajax'];
-				checkImportAjax.body = this.items;
+				checkImportAjax.body = this._buildGridData();
 				checkImportAjax.generateRequest();
+			},
+
+			/**
+			 * 그리드 데이터를 추출한다. 
+			 */
+			_buildGridData: function() {
+				var importGrid = this.getGrid().getGridObject();
+				importGrid.commit();
+				var importDataSet = importGrid.dataSource();
+				var importRowCount = importDataSet.rowCount();
+				return importRowCount == 0 ? [] : importDataSet.getRowObjects(0, importRowCount);
+			},
+
+			/**
+			 * 행 삭제 액션 커스터마이징 
+			 */
+			_handleDeleteRow: function(event) {
+				event.preventDefault();
+				var importGrid = this.getGrid().getGridObject();
+				importGrid.commit();
+				var importDataSet = importGrid.dataSource();
+				if(importDataSet.rowCount() == 0) return;
+
+				importDataSet.setDeleteCreated(true);
+				var rows = importGrid.getCheckedRows();
+				for(var i = 0 ; i < rows.length ; i++) {
+					importDataSet.deleteRow(rows[i].dataIndex());
+				}
+
+				importGrid.checkAll(false);
 			},
 
 			/**
@@ -240,6 +310,17 @@
 			 */
 			_handleSave: function(event) {
 				event.preventDefault();
+				if(!this.checkedForSave) {
+					this.openInfoMsg({ 
+						title : Things.DataGlobal.t('title.info'),
+						text : Things.DataGlobal.t('text.CHECK_A_FIRST_BEFORE_B', { a : Things.DataGlobal.t('button.save'), b : Things.DataGlobal.t('button.check') }),
+						type : 'info', 
+						timer : 5000 
+					});
+					return;
+				}
+
+				this.saveItems = this._buildGridData();
 				this.createIndex = 0;
 				this._createData();
 			},
@@ -248,8 +329,8 @@
 			 * Create Import Data
 			 */
 			_createData: function() {
-				if(this.items.length > this.createIndex) {
-					var row = this.items[this.createIndex];
+				if(this.saveItems.length > this.createIndex) {
+					var row = this.saveItems[this.createIndex];
 					row.cud_flag_ = 'c';
 					var ajax = this.$['create-ajax'];
 					ajax.body = [row];
@@ -258,6 +339,7 @@
 				} else {
 					this.items = this.tempItems;
 					this.tempItems = [];
+					this.saveItems = [];
 					this.createIndex = 0;
 				}
 			},
@@ -268,7 +350,7 @@
 			 * @param {Object} event
 			 */
 			_handleSaveSuccess: function(event) {
-				var successItem = this.items[this.createIndex];
+				var successItem = this.saveItems[this.createIndex];
 				successItem._result_ = 'OK';
 				successItem._status_ = 'S';
 				this.tempItems[this.createIndex] = successItem;
@@ -282,8 +364,8 @@
 			 * @param {Object} event
 			 */
 			_handleSaveFailure: function(event) {
-				var failureItem = this.items[this.createIndex];
-				failureItem._result_ = 'Failure';
+				var failureItem = this.saveItems[this.createIndex];
+				failureItem._result_ = Things.DataGlobal.t('label.failure');
 				failureItem._status_ = 'F';
 				failureItem._message_ = event.detail.request.xhr.response.msg;
 				this.tempItems[this.createIndex] = failureItem;
@@ -298,8 +380,10 @@
 			 */
 			_handleCheckImportSuccess: function(event) {
 				var items = event.detail;
+				// 아이템별 Ready 상태로 변경
 				items.forEach(function(item) { item._status_ = 'R'; });
 				this.items = items;
+				this.checkedForSave = true;
 			},
 
 			/**
@@ -310,7 +394,6 @@
 			_handleCheckImportFailure: function(event) {
 				console.log(event);
 			}
-
 		});
 	</script>
 </dom-module>

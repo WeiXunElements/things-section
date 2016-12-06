@@ -109,6 +109,10 @@
         }
       },
 
+      listeners: {
+        'import-dialog.iron-overlay-closed' : '_onDialogClose'
+      },
+
       /**
        * Open Import Dialog
        *
@@ -116,8 +120,9 @@
        * @param {Array} gridModel
        * @param {Array} gridColumns
        * @param {Object} menuInfo
+       * @param {Function} closeCallback
        */
-      open: function(gridConfig, gridModel, gridColumns, menuInfo) {
+      open: function(gridConfig, gridModel, gridColumns, menuInfo, closeCallback) {
         var scrollable = this.$.scrollroot;
 
         if(this.importView) {
@@ -134,6 +139,7 @@
         this.importView.gridModel = this._handleGridModel(gridModel);
         this.importView.gridColumns = this._handleGridColumns(gridColumns);
         this.importView.menuInfo = menuInfo;
+        this.importView.closeCallback = closeCallback;
         scrollable.appendChild(this.importView);
         this.$['import-dialog'].open();
       },
@@ -143,6 +149,12 @@
        */
       close: function() {
         this.$['import-dialog'].close();
+      },
+
+      _onDialogClose: function(event) {
+        if(this.importView.closeCallback) {
+          this.importView.closeCallback.apply();
+        }
       },
 
       /**
