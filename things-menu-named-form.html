@@ -1,0 +1,75 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../things-ajax/things-ajax.html">
+<link rel="import" href="../things-form/things-resource-form.html">
+
+<link rel="import" href="things-menu-named-form-behavior.html">
+
+<!--
+	Menu 기반 Form 기반 화면.
+	외부에서 메뉴 명만 전달하면 해당 메뉴의 메타 데이터를 조회하여 리소스 폼을 구성한다.
+-->
+
+<dom-module id="things-menu-named-form">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+
+		<things-ajax 
+			id="resource-ajax"
+			method="GET"
+			resource-url="[[resourceUrl]]"
+			last-response="{{resource}}">
+		</things-ajax> 
+
+		<things-ajax 
+			auto
+			id="meta-ajax"
+			method="GET"
+			resource-url="[[menuMetaUrl]]"
+			last-response="{{metaData}}">
+		</things-ajax>
+
+		<things-resource-form
+			id="form"
+			form-fields="[[resourceFormFields]]"
+			column-count="[[columnCount]]"
+			resource="[[resource]]"
+			resource-id="[[resourceId]]"
+			resource-url="[[resourceUrl]]"
+			buttons="[[buttons]]"
+			hide-stamp="[[hideStamp]]">
+		</things-resource-form>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'things-menu-named-form',
+
+			behaviors: [
+				Things.MenuNamedFormBehavior
+			],
+
+			properties: {
+				/**
+				 * Stamp를 숨길 지 여부 
+				 */
+				hideStamp: {
+					type: Boolean,
+					value: false
+				},
+
+				/**
+				 * 버튼 리스트 
+				 */
+				buttons: {
+					type: Array,
+					value: []
+				}
+			}
+		});
+	</script>
+</dom-module>

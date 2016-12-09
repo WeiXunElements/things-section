@@ -1,0 +1,215 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html">
+<link rel="import" href="../things-meta/things-detail-form-meta-behavior.html">
+
+<script>
+
+window.Things = window.Things || {};
+
+/**
+ * 메뉴 메타데이터 기반 폼 화면 Behavior
+ *
+ * @polymerBehavior Things.MenuNamedFormBehavior
+ */
+Things.MenuNamedFormBehaviorImpl = {
+
+	properties: {
+		/**
+		 * 메뉴명
+		 */
+		menuName: {
+			type: String
+		},
+
+		/**
+		 * 화면 대표 URL
+		 */
+		resourceUrl: {
+			type: String,
+		},
+
+		/**
+		 * 폼 데이터 
+		 */
+		resource: {
+			type: Object,
+			observer: '_resourceChanged'
+		},
+
+		/**
+		 * 리스스 아이디 
+		 */
+		resourceId: {
+			type: String
+		},
+
+		/**
+		 * 폼 컬럼 개수 
+		 */
+		columnCount: {
+			type: Number,
+			value: 1
+		},
+
+		/**
+		 * 화면 구성을 위해 필요한 메뉴 메타 데이터를 조회하기 위한 URL
+		 */
+		menuMetaUrl: {
+			type: String,
+			computed: '_computeMenuMetaUrl(menuName)'
+		},
+
+		/**
+		 * 메뉴 정보 
+		 */
+		menuInfo: {
+			type: Object
+		},
+
+		/**
+		 * Menu meta data - resourceFormFields 정보를 파싱한다. 
+		 */
+		metaData: {
+			type: Object,
+			observer: 'parseMetaData'
+		}
+	},
+
+	/**
+	 * menuName으로 부터 Menu Meta URL을 생성
+	 *
+	 * @param {String} menuName
+	 * @return {String} Get Menu Meta URL
+	 */
+	_computeMenuMetaUrl: function(menuName) {
+		return 'menus/' + menuName + '/named_meta';
+	},
+
+	/**
+	 * resource 변경시 ...
+	 *
+	 * @param {Object} resource
+	 */
+	_resourceChanged: function(resource) {
+		if(resource) {
+			this.resourceId = resource.id;
+			this.resourceUrl = this.resourceUrl(':id', this.resourceId);
+		}
+	},
+
+	/**
+	 * meta data를 파싱한다.
+	 *
+	 * @param {Object} metaData
+	 */
+	parseMetaData: function(metaData) {
+		if(!metaData || metaData == null) return;
+		// Menu Information
+		this.menuInfo = metaData.menu;
+		// 조회 / 저장 URL
+		this.resourceUrl = this.menuInfo.resource_url + '/:id';
+		// Parse Resource Form Fields - detail form
+		this.resourceFormFields = this._parseResourceFormFields(metaData.columns);;
+	},
+
+	/**
+	 * Form을 리턴한다.
+	 */
+	getForm: function() {
+		return this.$.form;
+	},
+
+	/**
+	 * Form 데이터를 serialize하여 리턴 
+	 */
+	serializeMyForm: function() {
+		return this.getForm().serializeMyForm();
+	},
+
+	/**
+	 * Form 데이터를 reset 
+	 */
+	resetMyForm: function() {
+		this.getForm().resetMyForm();
+	},
+
+	/**
+	 * Form 데이터 설정 
+	 *
+	 * @param {Object} data
+	 */
+	setFormData: function(data) {
+		this.getForm().setFormData(data);
+	},
+
+	/**
+	 * Focus를 설정한다.
+	 */
+	focus: function() {
+		this.getForm().focus();
+	},
+
+	/**
+	 * 모든 Form Element를 리턴 
+	 */
+	getFormElements: function() {
+		return this.getForm().getFormElements();
+	},
+
+	/**
+	 * Validation check before save. 필드들의 isValid 속성을 통해 valdation 체크를 수행
+	 */
+	validationCheck: function() {
+		return this.getForm().validationCheck();
+	},
+
+	/**
+	 * Submit form
+	 *
+	 * @param {Object} e 버튼 클릭 이벤트 
+	 */
+	submitMyForm: function(e) {
+		this.getForm().submitMyForm();
+	},
+			
+	/**
+	 * 폼 데이터를 초기화 
+	 */
+	resetData: function() {
+		this.getForm().resetMyForm();
+	},
+
+	/**
+	 * 폼 데이터를 리프레쉬  
+	 *
+	 * @param {Object} data
+	 */
+	refreshData: function(data) {
+		this.getForm().setFormData(data);
+	},
+
+	/**
+	 * ID Field를 리턴한다.
+	 */
+	getIdField: function() {
+		return (this.menuInfo && this.menuInfo.id_field) ? this.menuInfo.id_field : 'id';
+	},
+
+	/**
+	 * Title Field를 리턴한다.
+	 */
+	getTitleField: function() {
+		return (this.menuInfo && this.menuInfo.title_field) ? this.menuInfo.title_field : 'name';
+	}
+};
+
+Things.MenuNamedFormBehavior = [
+	Things.MenuNamedFormBehaviorImpl,
+	Things.DetailFormMetaBehavior,
+	Things.MsgBoxBehavior,
+	Things.GlobalBehavior
+];
+
+</script>
