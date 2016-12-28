@@ -271,7 +271,7 @@
 				items.forEach(function(item) {
 					for(var i = 0 ; i < refColumns.length ; i++) {
 						var refColumn = refColumns[i];
-						item[refColumn.name] = { id: null, name : item[refColumn.name] };
+						item[refColumn.name] = { id: null, name : item[refColumn.userData.originalField] };
 					}
 				});
 
@@ -288,7 +288,7 @@
 
 				for(var i = 0 ; i < this.gridColumns.length ; i++) {
 					var column = this.gridColumns[i];
-					if(column.valueCallback && column.type == 'calced') {
+					if(column.styles && column.styles.iconIndex == 'resource-selector') {
 						refColumns.push(column);
 					}
 				}
@@ -312,19 +312,20 @@
 			 */
 			_handleSave: function(event) {
 				event.preventDefault();
-				if(!this.checkedForSave) {
+
+				if(this.checkedForSave) {
+					this.saveItems = this._buildGridData();
+					this.createIndex = 0;
+					this._createData();
+
+				} else {
 					this.openInfoMsg({ 
 						title : Things.DataGlobal.t('title.info'),
 						text : Things.DataGlobal.t('text.CHECK_A_FIRST_BEFORE_B', { a : Things.DataGlobal.t('button.save'), b : Things.DataGlobal.t('button.check') }),
 						type : 'info', 
 						timer : 5000 
 					});
-					return;
 				}
-
-				this.saveItems = this._buildGridData();
-				this.createIndex = 0;
-				this._createData();
 			},
 
 			/**
