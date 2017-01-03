@@ -5,6 +5,10 @@
 <link rel="import" href="things-diy-based-grid.html">
 <link rel="import" href="things-import-grid.html">
 
+<!--
+  Dialog For Data Import 
+-->
+
 <dom-module id="things-import-dialog">
   <style>
     :host {
@@ -151,6 +155,9 @@
         this.$['import-dialog'].close();
       },
 
+      /**
+       * dialog close handler
+       */
       _onDialogClose: function(event) {
         if(this.importView.closeCallback) {
           this.importView.closeCallback.apply();
@@ -183,7 +190,7 @@
        * @return {Array} gridColumns
        */
       _handleGridColumns: function(gridColumns) {
-        var newGridColumns = [{
+        var newGridColumns = [ {
           fieldName: '_status_',
           name: '_status_',
           width: 30,
@@ -211,7 +218,7 @@
               styles.setIconIndex('menu_check.png');
             }
           }
-        }];
+        } ];
 
         for(var i = 0 ; i < gridColumns.length ; i++) {
           var gridColumn = gridColumns[i];
@@ -225,39 +232,8 @@
       },
 
       /**
-       * Import 할 수 있는 형식으로 컬럼 정보 변경
-       *
-       * @param {Array} gridColumns
-       * @return {Array} gridColumns
+       * 다이얼로그 ...
        */
-      /*_handleGridColumns: function(gridColumns) {
-        var newGridColumns = [], changedColumns = [];
-
-        for(var i = 0 ; i < gridColumns.length ; i++) {
-          var gridColumn = gridColumns[i];
-          if(this.excludeFieldNames.includes(gridColumn.fieldName)) continue;
-
-          var column = JSONfn.parse(JSONfn.stringify(gridColumn));
-          if(column.valueCallback && column.type == 'calced') {
-            delete column['valueCallback'];
-            delete column['type'];
-            delete column['valueType'];
-            changedColumns.push(column);
-
-          } else if(column.userObj && column.userObj.resourceName) {
-            changedColumn = changedColumns[changedColumns.length - 1];
-            changedColumn.userObj = { titleField : 'name' };
-            continue;
-          }
-            
-          newGridColumns.push(column);
-        }
-
-        newGridColumns.push({fieldName: '_result_', width: 80, header : { text : 'Result' }});
-        newGridColumns.push({fieldName: '_message_', width: 250, header : { text : 'Message' }});
-        return newGridColumns;
-      }*/
-
       getDialog: function() {
         return this.$['import-dialog'];
       }

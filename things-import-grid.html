@@ -54,10 +54,10 @@
 		Polymer({
 			is: 'things-import-grid',
 
-      behaviors: [
-        Things.MsgBoxBehavior,
-        Things.GlobalBehavior
-      ],
+			behaviors: [
+				Things.MsgBoxBehavior,
+				Things.GlobalBehavior
+			],
 
 			properties: {
 				/**
@@ -129,8 +129,8 @@
 				},
 
 				/**
-				* Grid에서 사용할 이미지 리스트 
-				*/
+				 * Grid에서 사용할 이미지 리스트 
+				 */
 				gridImageItems: {
 					type: Array,
 					value: function() {
@@ -150,8 +150,8 @@
 				},
 
 				/**
-				* 버튼 
-				*/
+				 * 버튼 
+				 */
 				buttons: {
 					type: Array,
 					value: [ {
@@ -189,7 +189,6 @@
 				'create-ajax.things-ajax-response' : '_handleSaveSuccess',
 				'create-ajax.things-ajax-error' : '_handleSaveFailure',
 				'check-import-ajax.things-ajax-response' : '_handleCheckImportSuccess',
-				'check-import-ajax.things-ajax-error' : '_handleCheckImportFailure',
 				'check-btn-tap' : '_checkForImport'
 			},
 
@@ -312,6 +311,8 @@
 			 */
 			_handleSave: function(event) {
 				event.preventDefault();
+				// 진행 중 메시지 표시 
+				this.showProcessing();
 
 				if(this.checkedForSave) {
 					this.saveItems = this._buildGridData();
@@ -344,6 +345,7 @@
 					this.tempItems = [];
 					this.saveItems = [];
 					this.createIndex = 0;
+					this.showCompleted();
 				}
 			},
 
@@ -382,6 +384,7 @@
 			 * @param {Object} event
 			 */
 			_handleCheckImportSuccess: function(event) {
+				event.preventDefault();
 				var items = event.detail;
 				// 아이템별 Ready 상태로 변경
 				items.forEach(function(item) { item._status_ = 'R'; });
@@ -390,12 +393,27 @@
 			},
 
 			/**
-			 * Import Check 실패시 액션
-			 *
-			 * @param {Object} event
+			 * 처리되고 있음을 표시 ...
 			 */
-			_handleCheckImportFailure: function(event) {
-				console.log(event);
+			showProcessing: function(count) {
+				this.openInfoMsg({ 
+					title : Things.DataGlobal.t('title.info'),
+					text : Things.DataGlobal.t('text.Server Processing'),
+					type : 'info', 
+					timer : 5000 
+				});
+			},
+
+			/**
+			 * 처리완료
+			 */
+			showCompleted: function() {
+				this.openInfoMsg({ 
+					title : Things.DataGlobal.t('title.info'),
+					text : Things.DataGlobal.t('text.processed'),
+					type : 'info', 
+					timer : 5000 
+				});
 			}
 		});
 	</script>
