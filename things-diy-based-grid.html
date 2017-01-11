@@ -52,6 +52,7 @@
 			current-page="[[page]]"
 			limit="[[limit]]"
 			data="[[items]]"
+			grid-cell-styles = [[gridCellStyles]]
 			total-count="[[itemCount]]"
 			grid-save-action="[[gridSaveUrl]]"
 			fixed-column-count="[[fixedColumnCount]]"
@@ -83,7 +84,26 @@
 					type: String,
 					computed: '_computeGetDiyGridUrl(diyGridName)'
 				},
-
+				/**
+				 * default style은 background, 커스트 마이징시에는 foreground
+				 * @type {Object}
+				 */
+	            gridCellStyles: {
+	                type: Array,
+	                value: function() {
+	                    return [{
+	                        expression: "state == 'c'",
+	                        styles: {
+	                            foreground: '#1000ff00'
+	                        }
+	                    }, {
+	                        expression: "(row % 2) > 0",
+	                        styles: {
+	                            foreground: '#f9f9f9'
+	                        }
+	                    }];
+	                }
+	            },
 				/**
 				 * Pagination 여부 
 				 */
