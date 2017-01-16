@@ -57,7 +57,9 @@
 			grid-save-action="[[gridSaveUrl]]"
 			fixed-column-count="[[fixedColumnCount]]"
 			selected-row-data="{{selectedRowData}}"
-			selected-cell-data="{{selectedCellData}}">
+			selected-cell-data="{{selectedCellData}}"
+			export-file-name="[[exportFileName]]"
+			export-sheet-name="[[exportFileName]]">
 		</things-resource-grid>
 	</template>
 
@@ -84,26 +86,28 @@
 					type: String,
 					computed: '_computeGetDiyGridUrl(diyGridName)'
 				},
+
 				/**
 				 * default style은 background, 커스트 마이징시에는 foreground
 				 * @type {Object}
 				 */
-	            gridCellStyles: {
-	                type: Array,
-	                value: function() {
-	                    return [{
-	                        expression: "state == 'c'",
-	                        styles: {
-	                            foreground: '#1000ff00'
-	                        }
-	                    }, {
-	                        expression: "(row % 2) > 0",
-	                        styles: {
-	                            foreground: '#f9f9f9'
-	                        }
-	                    }];
-	                }
-	            },
+				gridCellStyles: {
+					type: Array,
+					value: function() {
+						return [ {
+							expression: "state == 'c'",
+							styles: {
+								foreground: '#1000ff00'
+							}
+						}, {
+							expression: "(row % 2) > 0",
+							styles: {
+							foreground: '#f9f9f9'
+							}
+						} ];
+					}
+				},
+
 				/**
 				 * Pagination 여부 
 				 */
@@ -128,19 +132,27 @@
 				},
 				
 				/**
-				* 선택된 row data
-				*/
+				 * 선택된 row data
+				 */
 				selectedRowData: {
 					type: Object,
 					notify: true
 				},
 
 				/**
-				* 선택된 cell data
-				*/
+				 * 선택된 cell data
+				 */
 				selectedCellData: {
 					type: Object,
 					notify: true
+				},
+
+				/**
+				 * 내보내기 파일명
+				 */
+				exportFileName: {
+					type: Number,
+					value: 'Export'
 				},
 
 				/**
@@ -157,8 +169,8 @@
 			],
 
 			/**
-			* 그리드 정보 초기화
-			*/
+			 * 그리드 정보 초기화
+			 */
 			ready: function() {
 				this.set('grid', this.$.grid) 
 			},
