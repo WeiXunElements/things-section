@@ -33,14 +33,14 @@
         @apply(--layout-horizontal);
         @apply(--layout-end-justified);
         padding: 0 10px;
-      }      
+      }
     </style>
 
     <things-ajax  id="get-scene"
                   resource-url="scenes/:id"
                   resource-id="[[resourceId]]"
                   last-response="{{response}}">
-    </things-ajax>    
+    </things-ajax>
 
     <things-scene-viewer model="[[model]]"
                          values="[[monitoringData]]"
@@ -59,9 +59,11 @@
       ],
 
       properties: {
-        
+
         /**
          * scene id가 변경되면 scene을 가져온다.
+         * *******
+         * @type {Number}
          */
         resourceId: {
           type: Number,
@@ -70,6 +72,8 @@
 
         /**
          * 가져온 scene의 모델을 파싱하여 scene viewer에 넘겨준다.
+         * *******
+         * @type {Object}
          */
         response: {
           type: Object,
@@ -78,6 +82,8 @@
 
         /**
          * Scene Model
+         * ******
+         * @type {Object}
          */
         model: {
           type: Object,
@@ -86,6 +92,8 @@
 
         /**
          * Scene 정보 조회 후 ...
+         * *******
+         * @type {Object}
          */
         sceneData: {
           type: Object,
@@ -95,7 +103,9 @@
         /**
          * 외부로 부터 전달 받는 scene 데이터
          * pull-repeat or subscribe를 통해 데이터를 전달 받아
-         * scene 모델에 초기화 
+         * scene 모델에 초기화
+         * *******
+         * @type {Array}
          */
         message: {
           type: Array,
@@ -103,7 +113,9 @@
         },
 
         /**
-         * 모니터링 데이터 
+         * 모니터링 데이터
+         * *******
+         * @type {Object}
          */
         monitoringData: {
           type: Object
@@ -111,7 +123,8 @@
       },
 
       /**
-       * Scene 정보 조회 후 모델 설정 
+       * Scene 정보 조회 후 모델 설정
+       * ********
        */
       responseChanged: function(data) {
         if(data) {
@@ -121,6 +134,7 @@
 
       /**
        * 모니터링 데이터를 전달 받는다
+       * *******
        */
       messageChanged: function(data) {
         this.monitoringData = data;
@@ -128,6 +142,7 @@
 
       /**
        * 모니터링 데이터를 받음 ...
+       * ********
        */
       dataReceived: function(message) {
         this.monitoringData = message;
@@ -135,6 +150,7 @@
 
       /**
        * resource id가 변경되면 scene을 가져 온다.
+       * *******
        */
       resourceIdChanged: function() {
         this.$['get-scene'].generateRequest();

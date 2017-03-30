@@ -18,15 +18,15 @@
 			}
 		</style>
 
-		<things-ajax 
+		<things-ajax
 			auto
 			id="diy-form-ajax"
 			method="GET"
 			resource-url="[[diyFormUrl]]"
 			last-response="{{diyForm}}">
-		</things-ajax> 
+		</things-ajax>
 
-		<things-ajax 
+		<things-ajax
 			auto
 			id="meta-ajax"
 			method="GET"
@@ -55,6 +55,8 @@
 			properties: {
 				/**
 				 * DiyForm 명
+				 * *******
+				 * @type {String}
 				 */
 				diyFormName : {
 					type: String
@@ -62,6 +64,8 @@
 
 				/**
 				 * DiyForm을 조회하기 위한 URL
+				 * ******
+				 * @type {String}
 				 */
 				diyFormUrl: {
 					type: String,
@@ -70,13 +74,17 @@
 
 				/**
 				 * Form Submit URL
+				 * ******
+				 * @type {String}
 				 */
 				submitUrl: {
 					type: String
 				},
 
 				/**
-				 * 버튼 
+				 * 버튼
+				 * ******
+				 * @type {Array}
 				 */
 				buttons: {
 					type: Array,
@@ -85,7 +93,9 @@
 			},
 
 			/**
-			 * DiyForm 명이 변경되면 DiyForm 조회 URL을 리턴 
+			 * DiyForm 명이 변경되면 DiyForm 조회 URL을 리턴
+			 * ********
+			 * @type {String}
 			 *
 			 * @param {String} diyFormName
 			 */

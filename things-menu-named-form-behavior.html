@@ -18,6 +18,8 @@ Things.MenuNamedFormBehaviorImpl = {
 	properties: {
 		/**
 		 * 메뉴명
+		 * ******
+		 * @type {String}
 		 */
 		menuName: {
 			type: String
@@ -25,13 +27,17 @@ Things.MenuNamedFormBehaviorImpl = {
 
 		/**
 		 * 화면 대표 URL
+		 * ******
+		 * @type {String}
 		 */
 		resourceUrl: {
 			type: String,
 		},
 
 		/**
-		 * 폼 데이터 
+		 * 폼 데이터
+		 * ******
+		 * @type {Object}
 		 */
 		resource: {
 			type: Object,
@@ -39,14 +45,18 @@ Things.MenuNamedFormBehaviorImpl = {
 		},
 
 		/**
-		 * 리스스 아이디 
+		 * 리스스 아이디
+		 * *****
+		 * @type {String}
 		 */
 		resourceId: {
 			type: String
 		},
 
 		/**
-		 * 폼 컬럼 개수 
+		 * 폼 컬럼 개수
+		 * ******
+		 * @type {Number}
 		 */
 		columnCount: {
 			type: Number,
@@ -55,6 +65,8 @@ Things.MenuNamedFormBehaviorImpl = {
 
 		/**
 		 * 화면 구성을 위해 필요한 메뉴 메타 데이터를 조회하기 위한 URL
+		 * ******
+		 * @type {String}
 		 */
 		menuMetaUrl: {
 			type: String,
@@ -62,14 +74,18 @@ Things.MenuNamedFormBehaviorImpl = {
 		},
 
 		/**
-		 * 메뉴 정보 
+		 * 메뉴 정보
+		 * ******
+		 * @type {Object}
 		 */
 		menuInfo: {
 			type: Object
 		},
 
 		/**
-		 * Menu meta data - resourceFormFields 정보를 파싱한다. 
+		 * Menu meta data - resourceFormFields 정보를 파싱한다.
+		 * ******
+		 * @type {Object}
 		 */
 		metaData: {
 			type: Object,
@@ -101,7 +117,7 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * meta data를 파싱한다.
-	 *
+	 ********
 	 * @param {Object} metaData
 	 */
 	parseMetaData: function(metaData) {
@@ -116,28 +132,31 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * Form을 리턴한다.
+	 * ******
 	 */
 	getForm: function() {
 		return this.$.form;
 	},
 
 	/**
-	 * Form 데이터를 serialize하여 리턴 
+	 * Form 데이터를 serialize하여 리턴
+	 * ******
 	 */
 	serializeMyForm: function() {
 		return this.getForm().serializeMyForm();
 	},
 
 	/**
-	 * Form 데이터를 reset 
+	 * Form 데이터를 reset
+	 * *******
 	 */
 	resetMyForm: function() {
 		this.getForm().resetMyForm();
 	},
 
 	/**
-	 * Form 데이터 설정 
-	 *
+	 * Form 데이터 설정
+	 *******
 	 * @param {Object} data
 	 */
 	setFormData: function(data) {
@@ -146,13 +165,15 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * Focus를 설정한다.
+	 * *******
 	 */
 	focus: function() {
 		this.getForm().focus();
 	},
 
 	/**
-	 * 모든 Form Element를 리턴 
+	 * 모든 Form Element를 리턴
+	 * ******
 	 */
 	getFormElements: function() {
 		return this.getForm().getFormElements();
@@ -160,6 +181,7 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * Validation check before save. 필드들의 isValid 속성을 통해 valdation 체크를 수행
+	 * *******
 	 */
 	validationCheck: function() {
 		return this.getForm().validationCheck();
@@ -167,23 +189,24 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * Submit form
-	 *
-	 * @param {Object} e 버튼 클릭 이벤트 
+	 ********
+	 * @param {Object} e 버튼 클릭 이벤트
 	 */
 	submitMyForm: function(e) {
 		this.getForm().submitMyForm();
 	},
-			
+
 	/**
-	 * 폼 데이터를 초기화 
+	 * 폼 데이터를 초기화
+	 * *******
 	 */
 	resetData: function() {
 		this.getForm().resetMyForm();
 	},
 
 	/**
-	 * 폼 데이터를 리프레쉬  
-	 *
+	 * 폼 데이터를 리프레쉬
+	 ********
 	 * @param {Object} data
 	 */
 	refreshData: function(data) {
@@ -192,6 +215,7 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * ID Field를 리턴한다.
+	 * *******
 	 */
 	getIdField: function() {
 		return (this.menuInfo && this.menuInfo.id_field) ? this.menuInfo.id_field : 'id';
@@ -199,6 +223,7 @@ Things.MenuNamedFormBehaviorImpl = {
 
 	/**
 	 * Title Field를 리턴한다.
+	 * *******
 	 */
 	getTitleField: function() {
 		return (this.menuInfo && this.menuInfo.title_field) ? this.menuInfo.title_field : 'name';

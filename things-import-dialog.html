@@ -6,7 +6,7 @@
 <link rel="import" href="things-import-grid.html">
 
 <!--
-  Dialog For Data Import 
+  Dialog For Data Import
 -->
 
 <dom-module id="things-import-dialog">
@@ -90,20 +90,26 @@
       properties: {
         /**
          * Title of Import Dialog
+         * ******
+         * @type {String}
          */
         title: {
           type: String
         },
 
         /**
-         * Import View 
-         */        
+         * Import View
+         * *******
+         * @type {Object}
+         */
         importView: {
           type: Object
         },
 
         /**
-         * Import 제외 필드 
+         * Import 제외 필드
+         * *******
+         * @type {Array}
          */
         excludeFieldNames: {
           type: Array,
@@ -119,7 +125,7 @@
 
       /**
        * Open Import Dialog
-       *
+       *********
        * @param {Object} gridConfig
        * @param {Array} gridModel
        * @param {Array} gridColumns
@@ -150,6 +156,7 @@
 
       /**
        * dialog close
+       * *******
        */
       close: function() {
         this.$['import-dialog'].close();
@@ -197,17 +204,17 @@
           imageList: 'images',
           header: { text: ' ' },
           renderer: { type: 'icon' },
-          styles: { 
+          styles: {
             iconIndex: 'indicator_edit.png',
-            iconLocation: 'center' 
+            iconLocation: 'center'
           },
           styleCallback: function (index, styles) {
             var status = index.getValue();
 
-            // 1. 기본 상태 
+            // 1. 기본 상태
             if(!status || status == '') {
               styles.setIconIndex('indicator_insert.png');
-            // 2. 에러 상태 
+            // 2. 에러 상태
             } else if(status == 'F') {
               styles.setIconIndex('error_error.png');
             // 3. 준비 상태
@@ -233,6 +240,7 @@
 
       /**
        * 다이얼로그 ...
+       * *******
        */
       getDialog: function() {
         return this.$['import-dialog'];

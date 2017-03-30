@@ -18,21 +18,21 @@
 				@apply(--layout-vertical);
 				@apply(--layout-flex);
 			}
-			
+
 			things-resource-grid {
 				@apply(--layout-flex);
 			}
 		</style>
 
-		<things-ajax 
+		<things-ajax
 			auto
 			id="diy-grid-ajax"
 			method="GET"
 			resource-url="[[getDiyGridUrl]]"
 			last-response="{{diyGrid}}">
-		</things-ajax> 
+		</things-ajax>
 
-		<things-ajax 
+		<things-ajax
 			auto
 			id="meta-ajax"
 			method="GET"
@@ -40,12 +40,12 @@
 			last-response="{{metaData}}">
 		</things-ajax>
 
-		<things-resource-grid 
+		<things-resource-grid
 			id="grid"
 			paginatable="[[paginatable]]"
 			enable-detail-column="[[diyGrid.use_detail]]"
 			grid-height="[[gridHeight]]"
-			model="[[gridModel]]" 
+			model="[[gridModel]]"
 			columns="[[gridColumns]]"
 			config="[[gridConfig]]"
 			buttons="[[buttons]]"
@@ -74,6 +74,8 @@
 			properties: {
 				/**
 				 * DiyGrid 명
+				 * ********
+				 * @type {String}
 				 */
 				diyGridName : {
 					type: String
@@ -81,6 +83,8 @@
 
 				/**
 				 * DiyGrid를 조회하기 위한 URL
+				 * ******
+				 * @type {String}
 				 */
 				getDiyGridUrl: {
 					type: String,
@@ -89,6 +93,7 @@
 
 				/**
 				 * default style은 background, 커스트 마이징시에는 foreground
+				 * ******
 				 * @type {Object}
 				 */
 				gridCellStyles: {
@@ -109,7 +114,9 @@
 				},
 
 				/**
-				 * Pagination 여부 
+				 * Pagination 여부
+				 * *******
+				 * @type {Boolean}
 				 */
 				paginatable: {
 					type: Boolean,
@@ -118,6 +125,8 @@
 
 				/**
 				 * 그리드 Save URL
+				 * ******
+				 * @type {String}
 				 */
 				gridSaveUrl: {
 					type: String
@@ -125,14 +134,18 @@
 
 				/**
 				 * 그리드 고정 컬럼 수
+				 * *******
+				 * @type {Number}
 				 */
 				fixedColumnCount: {
 					type: Number,
 					value: 3
 				},
-				
+
 				/**
 				 * 선택된 row data
+				 * *******
+				 * @type {Object}
 				 */
 				selectedRowData: {
 					type: Object,
@@ -141,6 +154,8 @@
 
 				/**
 				 * 선택된 cell data
+				 * ******
+				 * @type {Object}
 				 */
 				selectedCellData: {
 					type: Object,
@@ -149,6 +164,8 @@
 
 				/**
 				 * 내보내기 파일명
+				 * ******
+				 * @type {Number}
 				 */
 				exportFileName: {
 					type: Number,
@@ -156,7 +173,9 @@
 				},
 
 				/**
-				 * 버튼 
+				 * 버튼
+				 * ******
+				 * @type {Array}
 				 */
 				buttons: {
 					type: Array,
@@ -170,22 +189,24 @@
 
 			/**
 			 * 그리드 정보 초기화
+			 * ******
 			 */
 			ready: function() {
-				this.set('grid', this.$.grid) 
+				this.set('grid', this.$.grid)
 			},
 
 			/**
-			 * DiyGrid 명이 변경되면 DiyGrid 조회 URL을 리턴 
-			 *
+			 * DiyGrid 명이 변경되면 DiyGrid 조회 URL을 리턴
+			 ********
 			 * @param {String} menuName
 			 */
 			_computeGetDiyGridUrl: function(diyGridName) {
 				return 'diy_grids/show_by_name?name=' + diyGridName;
 			},
-			
+
 			/**
 			 * things-resource-grid를 리턴한다.
+			 * ********
 			 */
 			getGrid: function() {
 				return this.$.grid;
@@ -193,6 +214,7 @@
 
 			/**
 			 * Grid Object (Dataludi)를 리턴한다.
+			 * *******
 			 */
 			getGridObject: function() {
 				return this.getGrid().getGridObject();
@@ -200,6 +222,7 @@
 
 			/**
 			 * Grid Resize
+			 * *******
 			 */
 			resizeGrid: function() {
 				this.getGrid().resizeGrid();
@@ -207,6 +230,7 @@
 
 			/**
 			 * Grid Columns 변경
+			 * *******
 			 */
 			_gridColumnsChanged: function(gridColumns) {
 				this.fire('things-view-columns-grid-meta-changed', gridColumns);

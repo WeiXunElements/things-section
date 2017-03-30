@@ -19,7 +19,9 @@ Things.DiyBasedGridBehaviorImpl = {
 
 	properties: {
 		/**
-		 * 조회 결과 
+		 * 조회 결과
+		 * *******
+		 * @type {Object}
 		 */
 		diyGrid: {
 			type: Object,
@@ -28,13 +30,17 @@ Things.DiyBasedGridBehaviorImpl = {
 
 		/**
 		 * 조회 결과 리스트 데이터
+		 * ******
+		 * @type {Array}
 		 */
 		items: {
 			type: Array
 		},
 
 		/**
-		 * 조회 결과 레코드 수  
+		 * 조회 결과 레코드 수
+		 * *******
+		 * @type {Number}
 		 */
 		itemCount: {
 			type: Number
@@ -42,6 +48,8 @@ Things.DiyBasedGridBehaviorImpl = {
 
 		/**
 		 * Detail 버튼을 활성화 시킬 지 여부
+		 * ******
+		 * @type {Boolean}
 		 */
 		enableDetailColumn: {
 			type: Boolean,
@@ -50,7 +58,9 @@ Things.DiyBasedGridBehaviorImpl = {
 
 		/**
 		 * 그리드 Height
-		 * -1이면 layout flex가 적용되고 -1이 아니면 설정된 gridHeight가 적용됨 
+		 * -1이면 layout flex가 적용되고 -1이 아니면 설정된 gridHeight가 적용됨
+		 * ******
+		 * @type {Number}
 		 */
 		gridHeight: {
 			type: Number,
@@ -61,20 +71,23 @@ Things.DiyBasedGridBehaviorImpl = {
 
 	/**
 	 * Resource Grid를 리턴한다.
+	 * ******
 	 */
 	getResourceGrid: function() {
 		return this.$.grid;
 	},
 
 	/**
-	 * 그리드 데이터를 초기화 
+	 * 그리드 데이터를 초기화
+	 * *******
 	 */
 	resetData: function() {
 		this.items = [];
 	},
 
 	/**
-	 * 그리드 데이터를 리프레쉬  
+	 * 그리드 데이터를 리프레쉬
+	 * *******
 	 */
 	refreshData: function(items) {
 		this.items = items;
@@ -82,6 +95,7 @@ Things.DiyBasedGridBehaviorImpl = {
 
 	/**
 	 * ID Field를 리턴한다.
+	 * *******
 	 */
 	getIdField: function() {
 		return (this.diyGrid && this.diyGrid.id_field) ? this.diyGrid.id_field : 'id';
@@ -89,6 +103,7 @@ Things.DiyBasedGridBehaviorImpl = {
 
 	/**
 	 * Title Field를 리턴한다.
+	 * ********
 	 */
 	getTitleField: function() {
 		return (this.diyGrid && this.diyGrid.title_field) ? this.diyGrid.title_field : 'name';
@@ -96,7 +111,7 @@ Things.DiyBasedGridBehaviorImpl = {
 
 	/**
 	 * 메뉴 메타데이터 변경시
-   *
+   ********
 	 * @param {Object} diyGrid
 	 */
 	_diyGridChanged: function(diyGrid) {

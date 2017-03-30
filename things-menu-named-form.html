@@ -18,14 +18,14 @@
 			}
 		</style>
 
-		<things-ajax 
+		<things-ajax
 			id="resource-ajax"
 			method="GET"
 			resource-url="[[resourceUrl]]"
 			last-response="{{resource}}">
-		</things-ajax> 
+		</things-ajax>
 
-		<things-ajax 
+		<things-ajax
 			auto
 			id="meta-ajax"
 			method="GET"
@@ -55,7 +55,9 @@
 
 			properties: {
 				/**
-				 * Stamp를 숨길 지 여부 
+				 * Stamp를 숨길 지 여부
+				 * ******
+				 * @type {Boolean}
 				 */
 				hideStamp: {
 					type: Boolean,
@@ -63,7 +65,9 @@
 				},
 
 				/**
-				 * 버튼 리스트 
+				 * 버튼 리스트
+				 * *****
+				 * @type {Array}
 				 */
 				buttons: {
 					type: Array,

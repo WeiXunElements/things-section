@@ -20,7 +20,9 @@ Things.MenuBasedGridBehaviorImpl = {
 
 	properties: {
 		/**
-		 * 조회 결과 
+		 * 조회 결과
+		 * *******
+		 * @type {Object}
 		 */
 		menuInfo: {
 			type: Object,
@@ -29,13 +31,17 @@ Things.MenuBasedGridBehaviorImpl = {
 
 		/**
 		 * 조회 결과 리스트 데이터
+		 * *******
+		 * @type {Array}
 		 */
 		items: {
 			type: Array
 		},
 
 		/**
-		 * 조회 결과 레코드 수  
+		 * 조회 결과 레코드 수
+		 * ******
+		 * @type {Number}
 		 */
 		itemCount: {
 			type: Number
@@ -43,6 +49,8 @@ Things.MenuBasedGridBehaviorImpl = {
 
 		/**
 		 * Detail 버튼을 활성화 시킬 지 여부
+		 * ******
+		 * @type {Boolean}
 		 */
 		enableDetailColumn: {
 			type: Boolean,
@@ -51,7 +59,8 @@ Things.MenuBasedGridBehaviorImpl = {
 
 		/**
 		 * 그리드 Height
-		 * -1이면 layout flex가 적용되고 -1이 아니면 설정된 gridHeight가 적용됨 
+		 * -1이면 layout flex가 적용되고 -1이 아니면 설정된 gridHeight가 적용됨
+		 * @type {Number}
 		 */
 		gridHeight: {
 			type: Number,
@@ -62,6 +71,7 @@ Things.MenuBasedGridBehaviorImpl = {
 
 	/**
 	 * Resource Grid를 리턴한다.
+	 * ******
 	 */
 	getResourceGrid: function() {
 		return this.$.grid;
@@ -69,6 +79,7 @@ Things.MenuBasedGridBehaviorImpl = {
 
 	/**
 	 * ID Field를 리턴한다.
+	 * *******
 	 */
 	getIdField: function() {
 		return (this.menuInfo && this.menuInfo.id_field) ? this.menuInfo.id_field : 'id';
@@ -76,6 +87,7 @@ Things.MenuBasedGridBehaviorImpl = {
 
 	/**
 	 * Title Field를 리턴한다.
+	 * ******
 	 */
 	getTitleField: function() {
 		return (this.menuInfo && this.menuInfo.title_field) ? this.menuInfo.title_field : 'name';
@@ -83,7 +95,7 @@ Things.MenuBasedGridBehaviorImpl = {
 
 	/**
 	 * 메뉴 메타데이터 변경시
-   *
+   ********
 	 * @param {Object} menuInfo
 	 */
 	_menuInfoChanged: function(menuInfo) {

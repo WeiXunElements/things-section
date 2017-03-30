@@ -17,6 +17,8 @@ Things.MenuBasedGridMetaBehaviorImpl = {
 	properties: {
 		/**
 		 * 메뉴 ID
+		 * ******
+		 * @type {String}
 		 */
 		menuId: {
 			type: String
@@ -24,14 +26,18 @@ Things.MenuBasedGridMetaBehaviorImpl = {
 
 		/**
 		 * 화면 구성을 위해 필요한 메뉴 메타 데이터를 조회하기 위한 URL
+		 * *******
+		 * @type {String}
 		 */
 		menuMetaUrl: {
 			type: String,
 			computed: '_computeMenuMetaUrl(menuId)'
-		},		
+		},
 
 		/**
-		 * Menu meta data - gridModel, gridColumns, buttons 등을 파싱한다. 
+		 * Menu meta data - gridModel, gridColumns, buttons 등을 파싱한다.
+		 * *********
+		 * @type {Array}
 		 */
 		metaData: {
 			type: Array,
@@ -51,19 +57,19 @@ Things.MenuBasedGridMetaBehaviorImpl = {
 
 	/**
 	 * meta data를 파싱한다.
-	 *
+	 *******
 	 * @param {Array} metaData
 	 */
 	parseMetaData: function(metaData) {
 		if(!metaData || metaData.length == 0) return;
 
-		// 1. Parse Grid Models 
+		// 1. Parse Grid Models
 		this.gridModel = this._parseGridModel(metaData.columns);
-		// 2. Parse Grid Columns 
+		// 2. Parse Grid Columns
 		this.gridColumns = this._parseGridColumns(metaData.columns);
-		// 3. Parse Grid Buttons 
+		// 3. Parse Grid Buttons
 		this.buttons = this._parseButtons(metaData.buttons);
-	}	
+	}
 
 };
 

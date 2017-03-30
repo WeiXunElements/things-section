@@ -1,23 +1,42 @@
-{
+
+  {
   "name": "things-section",
   "version": "0.1.34",
-  "authors": [
-    "Hatio Lab. <heartyoh@hatiolab.com>"
-  ],
-  "description": "An element providing things-section",
-  "keywords": [
-    "web-component",
-    "polymer",
-    "seed"
-  ],
-  "main": "things-section.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/ThingsElements/seed-element/",
-  "ignore": [
-    "/.*",
-    "/test/"
-  ],
-  "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0"
+    "authors": [
+      "Hatio Lab. <heartyoh@hatiolab.com>"
+    ],
+    "description": "An element providing things-section",
+    "keywords": [
+      "web-component",
+      "polymer",
+      "seed"
+    ],
+    "main": "things-section.html",
+    "license": "http://polymer.github.io/LICENSE.txt",
+    "homepage": "https://github.com/ThingsElements/seed-element/",
+    "ignore": [
+      "/.*",
+      "/test/"
+    ],
+    "dependencies": {
+      "polymer": "Polymer/polymer#^1.2.0",
+      "paper-icon-button": "^1.0.7",
+      "paper-badge": "^1.1.1",
+      "iron-icons": "^1.1.3",
+      "things-i18n-msg": "ThingsElements/things-i18n-msg#^0.1.25",
+      "things-input-field": "ThingsElements/things-input-field#^0.1.31",
+      "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
+      "paper-toast": "PolymerElements/paper-toast#^1.3.0",
+      "iron-dropdown": "PolymerElements/iron-dropdown#^1.5.5",
+      "paper-item": "PolymerElements/paper-item#^1.2.1",
+      "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+      "iron-signals": "PolymerElements/iron-signals#^1.0.3",
+      "things-card": "ThingsElements/things-card#^0.1.4",
+      "paper-button": "^1.0.11"
+    },
+    "devDependencies": {
+      "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+      "web-component-tester": "^4.0.0",
+      "iron-demo-helpers": "^1.2.3"
+    }
   }
-}
