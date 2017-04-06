@@ -69,6 +69,7 @@
     <paper-dialog
       id="import-dialog"
       modal
+      no-cancel-on-esc-key="[[noCancelOnEscKey]]"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation"
       always-on-top>
@@ -116,6 +117,15 @@
           value: function() {
             return ['id', 'domain_id', 'creator_id', 'updater_id', 'creator', 'updater', 'created_at', 'updated_at'];
           }
+        },
+        /**
+         * Set to true to disable canceling the overlay with the ESC key.
+         * True로 설정시 cancel dialog에서 ESC key로 꺼지지 않음
+         * @type {Boolean}
+         */
+        noCancelOnEscKey:{
+          type: Boolean,
+          value: false
         }
       },
 
