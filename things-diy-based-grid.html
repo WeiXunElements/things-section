@@ -42,18 +42,18 @@
 
 		<things-resource-grid
 			id="grid"
-			paginatable="[[paginatable]]"
 			enable-detail-column="[[diyGrid.use_detail]]"
 			grid-height="[[gridHeight]]"
 			model="[[gridModel]]"
 			columns="[[gridColumns]]"
 			config="[[gridConfig]]"
 			buttons="[[buttons]]"
-			current-page="[[page]]"
-			limit="[[limit]]"
 			data="[[items]]"
 			grid-cell-styles = [[gridCellStyles]]
-			total-count="[[itemCount]]"
+			paginatable="[[paginatable]]"
+			current-page="{{currentPage}}"
+			limit="{{limit}}"
+			total-count="{{totalCount}}"
 			grid-save-action="[[gridSaveUrl]]"
 			fixed-column-count="[[fixedColumnCount]]"
 			selected-row-data="{{selectedRowData}}"
@@ -80,7 +80,32 @@
 				diyGridName : {
 					type: String
 				},
+				/**
+				 * Page Limit
+				 */
+				limit: {
+					type: Number,
+					value: 50,
+					notify: true
+				},
 
+				/**
+				 * Current Page
+				 */
+				currentPage: {
+					type: Number,
+					value: 1,
+					notify: true
+				},
+
+				/**
+				 * Total Data Count
+				 */
+				totalCount: {
+					type: Number,
+					value: 0,
+					notify: true
+				},
 				/**
 				 * DiyGrid를 조회하기 위한 URL
 				 * ******
