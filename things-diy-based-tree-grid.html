@@ -14,7 +14,7 @@ Copyright © HatioLab Inc. All rights reserved.
 외부에서 DiyGrid 아이디만 전달하면 DiyGrid 기반으로 그리드가 표시된다.
 -->
 
-<dom-module id="things-diy-based-grid">
+<dom-module id="things-diy-based-tree-grid">
 	<template>
 		<style>
 			:host {
@@ -23,7 +23,7 @@ Copyright © HatioLab Inc. All rights reserved.
 				@apply(--layout-flex);
 			}
 
-			things-resource-grid {
+			things-tree-grid {
 				@apply(--layout-flex);
 			}
 		</style>
@@ -44,10 +44,10 @@ Copyright © HatioLab Inc. All rights reserved.
 			last-response="{{metaData}}">
 		</things-ajax>
 
-		<things-resource-grid
+		<things-tree-grid
 			id="grid"
+			enable-toolbar
 			enable-detail-column="[[diyGrid.use_detail]]"
-			auto-filter = "[[autoFilter]]"
 			grid-height="[[gridHeight]]"
 			model="[[gridModel]]"
 			columns="[[gridColumns]]"
@@ -65,12 +65,12 @@ Copyright © HatioLab Inc. All rights reserved.
 			selected-cell-data="{{selectedCellData}}"
 			export-file-name="[[exportFileName]]"
 			export-sheet-name="[[exportFileName]]">
-		</things-resource-grid>
+		</things-tree-grid>
 	</template>
 
 	<script>
 		Polymer({
-			is: 'things-diy-based-grid',
+			is: 'things-diy-based-tree-grid',
 
 			behaviors: [
 				Things.DiyBasedGridBehavior
@@ -86,18 +86,7 @@ Copyright © HatioLab Inc. All rights reserved.
 					type: String
 				},
 				/**
-				 * grid에 column auto filter를 추가 할 것인지에 대한 옵션으로 조회된 결과내 filter를 지원하며 대상중 resource selector, resource-column, file-selector, image-selector는 제외 되며 code list의 filter는 common code값으로 filterring된다.
-				 * ****
-				 * @type {Boolean}
-				 */
-				autoFilter:{
-					type: Boolean,
-					value: false
-				},
-				/**
 				 * Page Limit
-				 * ****
-				 * @type {Number}
 				 */
 				limit: {
 					type: Number,
@@ -107,8 +96,6 @@ Copyright © HatioLab Inc. All rights reserved.
 
 				/**
 				 * Current Page
-				 * ****
-				 * @type {Number}
 				 */
 				currentPage: {
 					type: Number,
@@ -118,8 +105,6 @@ Copyright © HatioLab Inc. All rights reserved.
 
 				/**
 				 * Total Data Count
-				 * ****
-				 * @type {Number}
 				 */
 				totalCount: {
 					type: Number,
@@ -231,7 +216,6 @@ Copyright © HatioLab Inc. All rights reserved.
 			observers: [
 				'_gridColumnsChanged(gridColumns)'
 			],
-
 			/**
 			 * 그리드 정보 초기화
 			 * ******
