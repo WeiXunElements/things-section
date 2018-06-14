@@ -5,6 +5,7 @@ Copyright © HatioLab Inc. All rights reserved.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-dialog-behavior/paper-dialog-behavior.html">
 <link rel="import" href="../paper-dialog-behavior/paper-dialog-shared-styles.html">
+<link rel="import" href="../things-dialog-resize-behavior/things-dialog-resize-behavior.html">
 
 <link rel="import" href="things-diy-based-grid.html">
 <link rel="import" href="things-import-grid.html">
@@ -30,6 +31,8 @@ Copyright © HatioLab Inc. All rights reserved.
       @apply(--things-padding-clear)
     }
     paper-dialog {
+      height: 80%;
+      width: 70%;
       position: fixed;
       top: 10%;
       bottom:10%;
@@ -77,7 +80,7 @@ Copyright © HatioLab Inc. All rights reserved.
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation"
       always-on-top>
-      <paper-toolbar>
+      <paper-toolbar id="import-popup-toolbar">
         <span class="title">[[title]]</span>
         <div class="buttonsGroup">
           <button dialog-dismiss class="close-btn"></button>
@@ -130,8 +133,20 @@ Copyright © HatioLab Inc. All rights reserved.
         noCancelOnEscKey:{
           type: Boolean,
           value: false
+        },
+        _dialogId:{
+          type: String,
+          value: 'import-dialog'
+        },
+        _dragTarget:{
+          type: String,
+          value: 'import-popup-toolbar'
         }
       },
+
+      behaviors: [ 
+        Things.DialogResizeBehavior
+      ],
 
       listeners: {
         'import-dialog.iron-overlay-closed' : '_onDialogClose'
