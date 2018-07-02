@@ -363,8 +363,13 @@ Copyright © HatioLab Inc. All rights reserved.
 			 */
 			_createData: function() {
 				if(this.saveItems.length > this.createIndex) {
-					var row = this.saveItems[this.createIndex];
-					row.cud_flag_ = 'c';
+					var row = this.items[this.createIndex];
+					if(row.id) {
+						row.cud_flag_ = 'u';
+					} else {
+						row.cud_flag_ = 'c';
+					}
+					
 					var ajax = this.$['create-ajax'];
 					ajax.body = [row];
 					ajax.generateRequest();
