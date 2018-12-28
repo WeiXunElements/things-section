@@ -64,7 +64,8 @@ Copyright © HatioLab Inc. All rights reserved.
 			selected-row-data="{{selectedRowData}}"
 			selected-cell-data="{{selectedCellData}}"
 			export-file-name="[[exportFileName]]"
-			export-sheet-name="[[exportFileName]]">
+			export-sheet-name="[[exportFileName]]"
+			on-things-grid-configured="_onResourceGridConfigured">
 		</things-resource-grid>
 	</template>
 
@@ -279,6 +280,14 @@ Copyright © HatioLab Inc. All rights reserved.
 			 */
 			_gridColumnsChanged: function(gridColumns) {
 				this.fire('things-view-columns-grid-meta-changed', gridColumns);
+			},
+
+			/**
+			 * Diy Grid加载完成后触发
+			 * *******
+			 */
+			_onResourceGridConfigured: function(e) {
+				this.fire('things-diy-grid-configured', e.detail);
 			}
 		});
 	</script>
